@@ -33,8 +33,8 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
 
       set({ currentWeather: mockWeather });
     } catch (error: any) {
-      toast.error('Hava durumu alınırken hata oluştu');
       console.error('Weather fetch error:', error);
+      toast.error('Hava durumu alınırken hata oluştu');
     } finally {
       set({ loading: false });
     }
@@ -56,8 +56,8 @@ export const useWeatherStore = create<WeatherState>((set, get) => ({
 
       set({ forecast });
     } catch (error: any) {
-      toast.error('Hava durumu tahmini alınırken hata oluştu');
       console.error('Forecast fetch error:', error);
+      toast.error('Hava durumu tahmini alınırken hata oluştu');
     }
   },
 }));

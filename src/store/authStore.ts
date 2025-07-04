@@ -18,6 +18,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initialize: async () => {
     try {
+      // Check if Supabase is properly configured
+      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+        console.warn('Supabase not configured');
+        set({ loading: false });
+        return;
+      }
+
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session?.user) {
@@ -41,6 +48,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signIn: async (email: string, password: string) => {
     try {
+      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+        toast.error('Supabase yapılandırması eksik');
+        return;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -68,6 +80,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signUp: async (email: string, password: string, name: string) => {
     try {
+      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+        toast.error('Supabase yapılandırması eksik');
+        return;
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
