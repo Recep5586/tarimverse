@@ -15,6 +15,95 @@ interface PostState {
   sharePost: (postId: string) => Promise<void>;
 }
 
+// Mock data for when Supabase is not configured
+const getMockPosts = (): Post[] => [
+  {
+    id: '1',
+    user_id: 'mock-user',
+    content: 'Bu yıl buğday hasadımız gerçekten harika oldu! Hektarda 6 ton verim aldık. 🌾',
+    category: 'mahsul',
+    image_url: 'https://images.pexels.com/photos/326082/pexels-photo-326082.jpeg?auto=compress&cs=tinysrgb&w=800',
+    likes_count: 42,
+    comments_count: 8,
+    shares_count: 12,
+    created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    updated_at: new Date().toISOString(),
+    user: {
+      id: 'mock-user',
+      name: 'Ahmet Karaca',
+      email: 'ahmet@example.com',
+      avatar_url: 'https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1',
+      location: 'Konya',
+      verified: true,
+      followers_count: 2340,
+      following_count: 156,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    is_liked: false,
+    hashtags: ['#buğday', '#hasat', '#organiktarım']
+  },
+  {
+    id: '2',
+    user_id: 'mock-user-2',
+    content: 'Seramdaki domates üretiminde yeni teknikler deniyorum. Dikey tarım sistemi kurduk ve alan verimliliği %40 arttı! 🍅',
+    category: 'teknoloji',
+    image_url: null,
+    likes_count: 67,
+    comments_count: 15,
+    shares_count: 23,
+    created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+    updated_at: new Date().toISOString(),
+    user: {
+      id: 'mock-user-2',
+      name: 'Fatma Öztürk',
+      email: 'fatma@example.com',
+      avatar_url: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1',
+      location: 'Antalya',
+      verified: true,
+      followers_count: 1890,
+      following_count: 234,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    is_liked: true,
+    hashtags: ['#seracılık', '#domates', '#teknoloji']
+  },
+  {
+    id: '3',
+    user_id: 'mock-user-3',
+    content: 'Organik gübre üretimi konusunda deneyimlerimi paylaşmak istiyorum. Kompost yapımı için en iyi yöntemler nelerdir?',
+    category: 'organik',
+    image_url: 'https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg?auto=compress&cs=tinysrgb&w=800',
+    likes_count: 28,
+    comments_count: 12,
+    shares_count: 5,
+    created_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+    updated_at: new Date().toISOString(),
+    user: {
+      id: 'mock-user-3',
+      name: 'Mehmet Demir',
+      email: 'mehmet@example.com',
+      avatar_url: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1',
+      location: 'İzmir',
+      verified: false,
+      followers_count: 567,
+      following_count: 89,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    is_liked: false,
+    hashtags: ['#organik', '#gübre', '#kompost']
+  }
+];
+
+// Check if Supabase is properly configured
+const isSupabaseConfigured = () => {
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  return url && key && url !== 'https://your-project.supabase.co' && key !== 'your-anon-key-here';
+};
+
 export const usePostStore = create<PostState>((set, get) => ({
   posts: [],
   loading: false,
@@ -23,70 +112,15 @@ export const usePostStore = create<PostState>((set, get) => ({
 
   fetchPosts: async () => {
     set({ loading: true });
-    try {
-      // Check if Supabase is properly configured
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-        console.warn('Supabase not configured, using mock data');
-        // Use mock data when Supabase is not configured
-        const mockPosts = [
-          {
-            id: '1',
-            user_id: 'mock-user',
-            content: 'Bu yıl buğday hasadımız gerçekten harika oldu! Hektarda 6 ton verim aldık. 🌾',
-            category: 'mahsul',
-            image_url: 'https://images.pexels.com/photos/326082/pexels-photo-326082.jpeg?auto=compress&cs=tinysrgb&w=800',
-            likes_count: 42,
-            comments_count: 8,
-            shares_count: 12,
-            created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date().toISOString(),
-            user: {
-              id: 'mock-user',
-              name: 'Ahmet Karaca',
-              email: 'ahmet@example.com',
-              avatar_url: 'https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1',
-              location: 'Konya',
-              verified: true,
-              followers_count: 2340,
-              following_count: 156,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            },
-            is_liked: false,
-            hashtags: ['#buğday', '#hasat', '#organiktarım']
-          },
-          {
-            id: '2',
-            user_id: 'mock-user-2',
-            content: 'Seramdaki domates üretiminde yeni teknikler deniyorum. Dikey tarım sistemi kurduk ve alan verimliliği %40 arttı! 🍅',
-            category: 'teknoloji',
-            image_url: null,
-            likes_count: 67,
-            comments_count: 15,
-            shares_count: 23,
-            created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date().toISOString(),
-            user: {
-              id: 'mock-user-2',
-              name: 'Fatma Öztürk',
-              email: 'fatma@example.com',
-              avatar_url: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1',
-              location: 'Antalya',
-              verified: true,
-              followers_count: 1890,
-              following_count: 234,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            },
-            is_liked: true,
-            hashtags: ['#seracılık', '#domates', '#teknoloji']
-          }
-        ];
-        
-        set({ posts: mockPosts, loading: false });
-        return;
-      }
+    
+    // Check if Supabase is properly configured
+    if (!isSupabaseConfigured()) {
+      console.info('Supabase not configured, using mock data');
+      set({ posts: getMockPosts(), loading: false });
+      return;
+    }
 
+    try {
       const { data, error } = await supabase
         .from('posts')
         .select(`
@@ -117,46 +151,20 @@ export const usePostStore = create<PostState>((set, get) => ({
         set({ posts: data || [] });
       }
     } catch (error: any) {
-      console.error('Fetch posts error:', error);
-      toast.error('Gönderiler yüklenirken hata oluştu');
-      
+      console.warn('Failed to fetch posts from Supabase, using mock data:', error.message);
       // Fallback to mock data on error
-      const mockPosts = [
-        {
-          id: '1',
-          user_id: 'mock-user',
-          content: 'Bu yıl buğday hasadımız gerçekten harika oldu! Hektarda 6 ton verim aldık. 🌾',
-          category: 'mahsul',
-          image_url: 'https://images.pexels.com/photos/326082/pexels-photo-326082.jpeg?auto=compress&cs=tinysrgb&w=800',
-          likes_count: 42,
-          comments_count: 8,
-          shares_count: 12,
-          created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          updated_at: new Date().toISOString(),
-          user: {
-            id: 'mock-user',
-            name: 'Ahmet Karaca',
-            email: 'ahmet@example.com',
-            avatar_url: 'https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1',
-            location: 'Konya',
-            verified: true,
-            followers_count: 2340,
-            following_count: 156,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          },
-          is_liked: false,
-          hashtags: ['#buğday', '#hasat', '#organiktarım']
-        }
-      ];
-      
-      set({ posts: mockPosts });
+      set({ posts: getMockPosts() });
     } finally {
       set({ loading: false });
     }
   },
 
   createPost: async (content: string, category: string, imageFile?: File) => {
+    if (!isSupabaseConfigured()) {
+      toast.error('Supabase yapılandırılmamış - gönderi paylaşılamıyor');
+      return;
+    }
+
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -221,6 +229,22 @@ export const usePostStore = create<PostState>((set, get) => ({
   },
 
   likePost: async (postId: string) => {
+    if (!isSupabaseConfigured()) {
+      // For mock data, just update local state
+      const { posts } = get();
+      const updatedPosts = posts.map(p =>
+        p.id === postId
+          ? { 
+              ...p, 
+              is_liked: !p.is_liked, 
+              likes_count: p.is_liked ? Math.max(0, p.likes_count - 1) : p.likes_count + 1 
+            }
+          : p
+      );
+      set({ posts: updatedPosts });
+      return;
+    }
+
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -278,6 +302,11 @@ export const usePostStore = create<PostState>((set, get) => ({
   },
 
   addComment: async (postId: string, content: string) => {
+    if (!isSupabaseConfigured()) {
+      toast.error('Supabase yapılandırılmamış - yorum eklenemez');
+      return;
+    }
+
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -325,6 +354,12 @@ export const usePostStore = create<PostState>((set, get) => ({
   },
 
   fetchComments: async (postId: string) => {
+    if (!isSupabaseConfigured()) {
+      // Return empty comments for mock data
+      set({ comments: [] });
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('comments')
@@ -345,6 +380,17 @@ export const usePostStore = create<PostState>((set, get) => ({
   },
 
   sharePost: async (postId: string) => {
+    if (!isSupabaseConfigured()) {
+      // For mock data, just update local state
+      const { posts } = get();
+      const updatedPosts = posts.map(p =>
+        p.id === postId ? { ...p, shares_count: (p.shares_count || 0) + 1 } : p
+      );
+      set({ posts: updatedPosts });
+      toast.success('Gönderi paylaşıldı! 📤');
+      return;
+    }
+
     try {
       await supabase.rpc('increment_shares_count', { post_id: postId });
 
