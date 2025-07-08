@@ -13,6 +13,8 @@ import FloatingElements from './components/FloatingElements';
 import AuthModal from './components/Auth/AuthModal';
 import MarketPlace from './components/Market/MarketPlace';
 import WeatherWidget from './components/Weather/WeatherWidget';
+import PlantingCalendar from './components/PlantingCalendar/PlantingCalendar';
+import GardenPlanner from './components/PlantingCalendar/GardenPlanner';
 
 // Data
 import { currentUser } from './data/samplePosts';
@@ -199,6 +201,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/market" element={<MarketPlace />} />
+          <Route path="/planting-calendar" element={<PlantingCalendar />} />
+          <Route path="/garden-planner" element={<GardenPlanner />} />
           <Route path="/weather" element={
             <div className="max-w-4xl mx-auto px-4 py-8">
               <WeatherWidget />

@@ -110,3 +110,87 @@ export interface ExpertAdvice {
   created_at: string;
   expert?: User;
 }
+
+// Planting Calendar Types
+export interface Crop {
+  id: string;
+  name: string;
+  scientific_name?: string;
+  category: string;
+  planting_season: string[];
+  growing_days: number;
+  soil_type: string[];
+  water_needs: string;
+  sun_requirements: string;
+  companion_plants?: string[];
+  avoid_plants?: string[];
+  planting_depth_cm?: number;
+  spacing_cm?: number;
+  temperature_min?: number;
+  temperature_max?: number;
+  description?: string;
+  tips?: string;
+  image_url?: string;
+  created_at: string;
+}
+
+export interface PlantingCalendar {
+  id: string;
+  crop_id: string;
+  region: string;
+  planting_month: number;
+  harvest_month: number;
+  is_indoor: boolean;
+  notes?: string;
+  created_at: string;
+  crop?: Crop;
+}
+
+export interface UserGarden {
+  id: string;
+  user_id: string;
+  name: string;
+  location: string;
+  region: string;
+  size_sqm?: number;
+  soil_type?: string;
+  sun_exposure?: string;
+  water_source?: string;
+  garden_type: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PlantingSchedule {
+  id: string;
+  user_id: string;
+  garden_id: string;
+  crop_id: string;
+  planned_planting_date: string;
+  actual_planting_date?: string;
+  expected_harvest_date: string;
+  actual_harvest_date?: string;
+  quantity?: string;
+  area_used_sqm?: number;
+  status: 'planned' | 'planted' | 'growing' | 'harvested' | 'failed';
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+  crop?: Crop;
+  garden?: UserGarden;
+}
+
+export interface HarvestReminder {
+  id: string;
+  user_id: string;
+  schedule_id: string;
+  reminder_type: 'planting' | 'watering' | 'fertilizing' | 'harvest' | 'pruning';
+  reminder_date: string;
+  title: string;
+  message: string;
+  is_sent: boolean;
+  is_completed: boolean;
+  created_at: string;
+  schedule?: PlantingSchedule;
+}
