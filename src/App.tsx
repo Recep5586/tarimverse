@@ -15,6 +15,10 @@ import MarketPlace from './components/Market/MarketPlace';
 import WeatherWidget from './components/Weather/WeatherWidget';
 import PlantingCalendar from './components/PlantingCalendar/PlantingCalendar';
 import GardenPlanner from './components/PlantingCalendar/GardenPlanner';
+import AutomationDashboard from './components/Automation/AutomationDashboard';
+import BlockchainCertificates from './components/Innovation/BlockchainCertificates';
+import CarbonTracking from './components/Innovation/CarbonTracking';
+import VirtualConsultation from './components/Innovation/VirtualConsultation';
 
 // Data
 import { currentUser } from './data/samplePosts';
@@ -203,6 +207,10 @@ function App() {
           <Route path="/market" element={<MarketPlace />} />
           <Route path="/planting-calendar" element={<PlantingCalendar />} />
           <Route path="/garden-planner" element={<GardenPlanner />} />
+          <Route path="/automation" element={<AutomationDashboard />} />
+          <Route path="/blockchain-certificates" element={<BlockchainCertificates />} />
+          <Route path="/carbon-tracking" element={<CarbonTracking />} />
+          <Route path="/virtual-consultation" element={<VirtualConsultation />} />
           <Route path="/weather" element={
             <div className="max-w-4xl mx-auto px-4 py-8">
               <WeatherWidget />

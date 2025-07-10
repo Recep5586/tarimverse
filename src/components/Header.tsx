@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Menu, X, Settings, LogOut, Bell, MessageCircle, Sprout, Leaf, Sun, Snowflake, ShoppingBag, Cloud } from 'lucide-react';
+import { Search, Menu, X, Settings, LogOut, Bell, MessageCircle, Sprout, Leaf, Sun, Snowflake, ShoppingBag, Cloud, Bot, Shield, Globe, Video } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import AuthModal from './Auth/AuthModal';
 
@@ -58,7 +58,11 @@ export default function Header({ season = 'spring' }: HeaderProps) {
     { path: '/market', label: 'Yerel Pazar', icon: 'market' },
     { path: '/planting-calendar', label: 'Ekim Takvimi', icon: 'calendar' },
     { path: '/garden-planner', label: 'Bahçe Planlayıcısı', icon: 'planner' },
+    { path: '/automation', label: 'Akıllı Tarım', icon: 'automation' },
     { path: '/weather', label: 'Hava Durumu', icon: 'weather' },
+    { path: '/blockchain-certificates', label: 'Sertifikalar', icon: 'certificates' },
+    { path: '/carbon-tracking', label: 'Karbon İzleme', icon: 'carbon' },
+    { path: '/virtual-consultation', label: 'Uzman Danışmanlık', icon: 'consultation' },
   ];
 
   return (
@@ -111,7 +115,11 @@ export default function Header({ season = 'spring' }: HeaderProps) {
                   {item.icon === 'market' && <ShoppingBag className="w-5 h-5" />}
                   {item.icon === 'calendar' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>}
                   {item.icon === 'planner' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>}
+                  {item.icon === 'automation' && <Bot className="w-5 h-5" />}
                   {item.icon === 'weather' && <Cloud className="w-5 h-5" />}
+                  {item.icon === 'certificates' && <Shield className="w-5 h-5" />}
+                  {item.icon === 'carbon' && <Globe className="w-5 h-5" />}
+                  {item.icon === 'consultation' && <Video className="w-5 h-5" />}
                   <span className="font-medium text-sm">{item.label}</span>
                 </Link>
               ))}
@@ -216,7 +224,11 @@ export default function Header({ season = 'spring' }: HeaderProps) {
                     {item.icon === 'market' && <ShoppingBag className="w-6 h-6" />}
                     {item.icon === 'calendar' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2z" /></svg>}
                     {item.icon === 'planner' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>}
+                    {item.icon === 'automation' && <Bot className="w-6 h-6" />}
                     {item.icon === 'weather' && <Cloud className="w-6 h-6" />}
+                    {item.icon === 'certificates' && <Shield className="w-6 h-6" />}
+                    {item.icon === 'carbon' && <Globe className="w-6 h-6" />}
+                    {item.icon === 'consultation' && <Video className="w-6 h-6" />}
                     <span className="font-medium">{item.label}</span>
                   </Link>
                 ))}
