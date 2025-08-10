@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import toast from 'react-hot-toast';
 
 interface AutomationRule {
@@ -93,13 +93,6 @@ interface AutomationState {
   fetchSensorData: (deviceId?: string) => Promise<void>;
   addSensorReading: (data: Omit<SensorData, 'id' | 'created_at'>) => Promise<void>;
 }
-
-// Check if Supabase is properly configured
-const isSupabaseConfigured = () => {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  return url && key && url !== 'https://your-project.supabase.co' && key !== 'your-anon-key-here';
-};
 
 // Mock data for when Supabase is not configured
 const getMockAutomationRules = (): AutomationRule[] => [
@@ -218,10 +211,10 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('automation_rules')
         .select('*')
         .eq('user_id', user.id)
@@ -244,13 +237,13 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('Otomasyon kuralı oluşturmak için giriş yapmalısınız');
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('automation_rules')
         .insert([{ ...rule, user_id: user.id }])
         .select()
@@ -274,7 +267,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('automation_rules')
         .update(updates)
         .eq('id', ruleId)
@@ -302,7 +295,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { error } = await supabase
+      const { error } = await supabase!
         .from('automation_rules')
         .delete()
         .eq('id', ruleId);
@@ -335,10 +328,10 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('iot_devices')
         .select('*')
         .eq('user_id', user.id)
@@ -359,13 +352,13 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('IoT cihazı eklemek için giriş yapmalısınız');
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('iot_devices')
         .insert([{ ...device, user_id: user.id }])
         .select()
@@ -389,7 +382,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('iot_devices')
         .update(updates)
         .eq('id', deviceId)
@@ -417,7 +410,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { error } = await supabase
+      const { error } = await supabase!
         .from('iot_devices')
         .delete()
         .eq('id', deviceId);
@@ -442,10 +435,10 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('ai_recommendations')
         .select('*')
         .eq('user_id', user.id)
@@ -472,7 +465,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('ai_recommendations')
         .update({ is_implemented: true })
         .eq('id', recommendationId)
@@ -500,7 +493,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('ai_recommendations')
         .update({ feedback_rating: rating })
         .eq('id', recommendationId)
@@ -528,7 +521,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      let query = supabase
+      let query = supabase!
         .from('sensor_data')
         .select('*')
         .order('recorded_at', { ascending: false })
@@ -555,7 +548,7 @@ export const useAutomationStore = create<AutomationState>((set, get) => ({
     }
 
     try {
-      const { data: newReading, error } = await supabase
+      const { data: newReading, error } = await supabase!
         .from('sensor_data')
         .insert([data])
         .select()

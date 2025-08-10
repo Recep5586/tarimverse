@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase, Crop, PlantingCalendar, UserGarden, PlantingSchedule, HarvestReminder } from '../lib/supabase';
+import { supabase, Crop, PlantingCalendar, UserGarden, PlantingSchedule, HarvestReminder, isSupabaseConfigured } from '../lib/supabase';
 import toast from 'react-hot-toast';
 
 interface PlantingState {
@@ -99,13 +99,6 @@ const getMockPlantingCalendar = (): PlantingCalendar[] => [
   }
 ];
 
-// Check if Supabase is properly configured
-const isSupabaseConfigured = () => {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  return url && key && url !== 'https://your-project.supabase.co' && key !== 'your-anon-key-here';
-};
-
 export const usePlantingStore = create<PlantingState>((set, get) => ({
   crops: [],
   plantingCalendar: [],
@@ -124,7 +117,7 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('crops')
         .select('*')
         .order('name');
@@ -147,7 +140,7 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      let query = supabase
+      let query = supabase!
         .from('planting_calendar')
         .select(`
           *,
@@ -183,10 +176,10 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('user_gardens')
         .select('*')
         .eq('user_id', user.id)
@@ -207,13 +200,13 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('Bahçe oluşturmak için giriş yapmalısınız');
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('user_gardens')
         .insert([{ ...garden, user_id: user.id }])
         .select()
@@ -237,7 +230,7 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('user_gardens')
         .update(updates)
         .eq('id', gardenId)
@@ -265,7 +258,7 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { error } = await supabase
+      const { error } = await supabase!
         .from('user_gardens')
         .delete()
         .eq('id', gardenId);
@@ -289,10 +282,10 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('planting_schedules')
         .select(`
           *,
@@ -317,13 +310,13 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('Ekim programı oluşturmak için giriş yapmalısınız');
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('planting_schedules')
         .insert([{ ...schedule, user_id: user.id }])
         .select(`
@@ -351,7 +344,7 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('planting_schedules')
         .update(updates)
         .eq('id', scheduleId)
@@ -383,10 +376,10 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('harvest_reminders')
         .select(`
           *,
@@ -414,13 +407,13 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('Hatırlatıcı oluşturmak için giriş yapmalısınız');
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('harvest_reminders')
         .insert([{ ...reminder, user_id: user.id }])
         .select(`
@@ -451,7 +444,7 @@ export const usePlantingStore = create<PlantingState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('harvest_reminders')
         .update({ is_completed: true })
         .eq('id', reminderId)

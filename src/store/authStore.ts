@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase, User } from '../lib/supabase';
+import { supabase, User, isSupabaseConfigured } from '../lib/supabase';
 import toast from 'react-hot-toast';
 
 interface AuthState {
@@ -18,17 +18,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initialize: async () => {
     try {
-      // Check if Supabase is properly configured
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      if (!isSupabaseConfigured()) {
         console.warn('Supabase not configured');
         set({ loading: false });
         return;
       }
 
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase!.auth.getSession();
       
       if (session?.user) {
-        const { data: profile } = await supabase
+        const { data: profile } = await supabase!
           .from('users')
           .select('*')
           .eq('id', session.user.id)
@@ -48,12 +47,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signIn: async (email: string, password: string) => {
     try {
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      if (!isSupabaseConfigured()) {
         toast.error('Supabase yapılandırması eksik');
         return;
       }
 
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase!.auth.signInWithPassword({
         email,
         password,
       });
@@ -61,7 +60,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (error) throw error;
 
       if (data.user) {
-        const { data: profile } = await supabase
+        const { data: profile } = await supabase!
           .from('users')
           .select('*')
           .eq('id', data.user.id)
@@ -80,12 +79,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signUp: async (email: string, password: string, name: string) => {
     try {
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      if (!isSupabaseConfigured()) {
         toast.error('Supabase yapılandırması eksik');
         return;
       }
 
-      const { data, error } = await supabase.auth.signUp({
+      const { data, error } = await supabase!.auth.signUp({
         email,
         password,
       });
@@ -93,7 +92,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (error) throw error;
 
       if (data.user) {
-        const { error: profileError } = await supabase
+        const { error: profileError } = await supabase!
           .from('users')
           .insert([
             {
@@ -118,7 +117,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signOut: async () => {
     try {
-      const { error } = await supabase.auth.signOut();
+      const { error } = await supabase!.auth.signOut();
       if (error) throw error;
       
       set({ user: null });
@@ -133,7 +132,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('users')
         .update(updates)
         .eq('id', user.id)

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase, MarketItem } from '../lib/supabase';
+import { supabase, MarketItem, isSupabaseConfigured } from '../lib/supabase';
 import toast from 'react-hot-toast';
 
 interface MarketState {
@@ -19,8 +19,7 @@ export const useMarketStore = create<MarketState>((set, get) => ({
   fetchItems: async (category?: string, location?: string) => {
     set({ loading: true });
     try {
-      // Check if Supabase is properly configured
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      if (!isSupabaseConfigured()) {
         console.warn('Supabase not configured, using mock data');
         // Use mock data when Supabase is not configured
         const mockItems = [
@@ -78,7 +77,7 @@ export const useMarketStore = create<MarketState>((set, get) => ({
         return;
       }
 
-      let query = supabase
+      let query = supabase!
         .from('market_items')
         .select(`
           *,
@@ -140,13 +139,13 @@ export const useMarketStore = create<MarketState>((set, get) => ({
 
   createItem: async (item) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('Ürün eklemek için giriş yapmalısınız');
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('market_items')
         .insert([
           {
@@ -174,7 +173,7 @@ export const useMarketStore = create<MarketState>((set, get) => ({
 
   updateItemStatus: async (itemId: string, status: MarketItem['status']) => {
     try {
-      const { error } = await supabase
+      const { error } = await supabase!
         .from('market_items')
         .update({ status })
         .eq('id', itemId);

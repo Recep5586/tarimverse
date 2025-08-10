@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase, Post, Comment } from '../lib/supabase';
+import { supabase, Post, Comment, isSupabaseConfigured } from '../lib/supabase';
 import toast from 'react-hot-toast';
 
 interface PostState {
@@ -97,13 +97,6 @@ const getMockPosts = (): Post[] => [
   }
 ];
 
-// Check if Supabase is properly configured
-const isSupabaseConfigured = () => {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  return url && key && url !== 'https://your-project.supabase.co' && key !== 'your-anon-key-here';
-};
-
 export const usePostStore = create<PostState>((set, get) => ({
   posts: [],
   loading: false,
@@ -113,7 +106,6 @@ export const usePostStore = create<PostState>((set, get) => ({
   fetchPosts: async () => {
     set({ loading: true });
     
-    // Check if Supabase is properly configured
     if (!isSupabaseConfigured()) {
       console.info('Supabase not configured, using mock data');
       set({ posts: getMockPosts(), loading: false });
@@ -121,7 +113,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('posts')
         .select(`
           *,
@@ -132,9 +124,9 @@ export const usePostStore = create<PostState>((set, get) => ({
       if (error) throw error;
 
       // Check which posts are liked by current user
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (user) {
-        const { data: likes } = await supabase
+        const { data: likes } = await supabase!
           .from('likes')
           .select('post_id')
           .eq('user_id', user.id);
@@ -166,7 +158,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('Gönderi paylaşmak için giriş yapmalısınız');
         return;
@@ -179,13 +171,13 @@ export const usePostStore = create<PostState>((set, get) => ({
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${user.id}/${Date.now()}.${fileExt}`;
         
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { data: uploadData, error: uploadError } = await supabase!.storage
           .from('post-images')
           .upload(fileName, imageFile);
 
         if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage
+        const { data: { publicUrl } } = supabase!.storage
           .from('post-images')
           .getPublicUrl(fileName);
 
@@ -195,7 +187,7 @@ export const usePostStore = create<PostState>((set, get) => ({
       // Extract hashtags
       const hashtags = content.match(/#\w+/g) || [];
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('posts')
         .insert([
           {
@@ -246,7 +238,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('Beğenmek için giriş yapmalısınız');
         return;
@@ -258,13 +250,13 @@ export const usePostStore = create<PostState>((set, get) => ({
 
       if (post.is_liked) {
         // Unlike
-        await supabase
+        await supabase!
           .from('likes')
           .delete()
           .eq('user_id', user.id)
           .eq('post_id', postId);
 
-        await supabase
+        await supabase!
           .from('posts')
           .update({ likes_count: Math.max(0, post.likes_count - 1) })
           .eq('id', postId);
@@ -278,11 +270,11 @@ export const usePostStore = create<PostState>((set, get) => ({
         set({ posts: updatedPosts });
       } else {
         // Like
-        await supabase
+        await supabase!
           .from('likes')
           .insert([{ user_id: user.id, post_id: postId }]);
 
-        await supabase
+        await supabase!
           .from('posts')
           .update({ likes_count: post.likes_count + 1 })
           .eq('id', postId);
@@ -308,13 +300,13 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) {
         toast.error('Yorum yapmak için giriş yapmalısınız');
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('comments')
         .insert([
           {
@@ -333,7 +325,7 @@ export const usePostStore = create<PostState>((set, get) => ({
       if (error) throw error;
 
       // Update post comment count
-      await supabase.rpc('increment_comments_count', { post_id: postId });
+      await supabase!.rpc('increment_comments_count', { post_id: postId });
 
       // Add to local comments
       const { comments } = get();
@@ -361,7 +353,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('comments')
         .select(`
           *,
@@ -392,7 +384,7 @@ export const usePostStore = create<PostState>((set, get) => ({
     }
 
     try {
-      await supabase.rpc('increment_shares_count', { post_id: postId });
+      await supabase!.rpc('increment_shares_count', { post_id: postId });
 
       // Update local state
       const { posts } = get();
