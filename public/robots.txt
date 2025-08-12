@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://tarimverse.com/sitemap.xml
+
+# Disallow admin pages
+Disallow: /admin
+Disallow: /api/
+
+# Allow important pages
+Allow: /
+Allow: /market
+Allow: /community
+Allow: /learning
+Allow: /planting-calendar
+Allow: /about
+Allow: /help
+
+# Crawl delay
+Crawl-delay: 1

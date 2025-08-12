@@ -195,7 +195,7 @@ export default function AutomationDashboard() {
                   >
                     <action.icon className="h-8 w-8 text-blue-600 mb-4 group-hover:scale-110 transition-transform" />
                     <h3 className="font-bold text-gray-900 mb-2">{action.title}</h3>
-                    <p className="text-gray-600 text-sm">{action.description}</p>
+                    {innovation.status === 'active' ? 'Kullanmaya Başla' : 'Daha Fazla Bilgi'}
                   </button>
                 ))}
               </div>

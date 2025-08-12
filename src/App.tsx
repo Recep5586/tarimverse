@@ -19,9 +19,31 @@ import AutomationDashboard from './components/Automation/AutomationDashboard';
 import BlockchainCertificates from './components/Innovation/BlockchainCertificates';
 import CarbonTracking from './components/Innovation/CarbonTracking';
 import VirtualConsultation from './components/Innovation/VirtualConsultation';
+import AIDiseaseDiagnosis from './components/Innovation/AIDiseaseDiagnosis';
+import YieldPrediction from './components/Innovation/YieldPrediction';
+import SmartIrrigation from './components/Innovation/SmartIrrigation';
+import PestAlerts from './components/Innovation/PestAlerts';
+import MarketPredictions from './components/Innovation/MarketPredictions';
+import CommunityGamification from './components/Innovation/CommunityGamification';
+import SustainabilityTracker from './components/Innovation/SustainabilityTracker';
+import PWAInstallPrompt from './components/PWA/PWAInstallPrompt';
+import AboutPage from './components/About/AboutPage';
+import PrivacyPolicy from './components/Legal/PrivacyPolicy';
+import TermsOfService from './components/Legal/TermsOfService';
 
 // Data
 import { currentUser } from './data/samplePosts';
+import CommunityHub from './components/Community/CommunityHub';
+import FarmAnalytics from './components/Analytics/FarmAnalytics';
+import LearningCenter from './components/Learning/LearningCenter';
+import UserSettings from './components/Settings/UserSettings';
+import UserProfile from './components/Profile/UserProfile';
+import NotificationCenter from './components/Notifications/NotificationCenter';
+import Footer from './components/Footer';
+import HelpCenter from './components/Help/HelpCenter';
+import MobileNavigation from './components/Mobile/MobileNavigation';
+import MetaTags from './components/SEO/MetaTags';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 function HomePage() {
   const { user } = useAuthStore();
@@ -124,31 +146,6 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-green-200/50 px-4 py-3 z-50">
-        <div className="flex justify-around">
-          {[
-            { icon: 'home', label: 'Bahçe', active: true },
-            { icon: 'market', label: 'Pazar', active: false },
-            { icon: 'weather', label: 'Hava', active: false },
-            { icon: 'user', label: 'Profil', active: false }
-          ].map((item, index) => (
-            <button key={index} className={`flex flex-col items-center py-2 px-3 rounded-2xl transition-all duration-300 ${
-              item.active ? 'text-green-600 bg-green-100/50' : 'text-gray-600'
-            }`}>
-              <div className={`w-8 h-8 rounded-xl flex items-center justify-center mb-1 ${
-                item.active ? 'bg-green-500 text-white shadow-lg' : ''
-              }`}>
-                {item.icon === 'home' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>}
-                {item.icon === 'market' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>}
-                {item.icon === 'weather' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" /></svg>}
-                {item.icon === 'user' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>}
-              </div>
-              <span className="text-xs font-medium">{item.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
 
       <AuthModal 
         isOpen={showAuthModal} 
@@ -199,42 +196,66 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen">
-        <Header />
-        
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/market" element={<MarketPlace />} />
-          <Route path="/planting-calendar" element={<PlantingCalendar />} />
-          <Route path="/garden-planner" element={<GardenPlanner />} />
-          <Route path="/automation" element={<AutomationDashboard />} />
-          <Route path="/blockchain-certificates" element={<BlockchainCertificates />} />
-          <Route path="/carbon-tracking" element={<CarbonTracking />} />
-          <Route path="/virtual-consultation" element={<VirtualConsultation />} />
-          <Route path="/weather" element={
-            <div className="max-w-4xl mx-auto px-4 py-8">
-              <WeatherWidget />
-            </div>
-          } />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
 
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(34, 197, 94, 0.2)',
-              borderRadius: '16px',
-              color: '#374151',
-            },
-          }}
-        />
-      </div>
+      <ErrorBoundary>
+        <div className="min-h-screen">
+          <MetaTags />
+          <Header />
+          
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/market" element={<MarketPlace />} />
+            <Route path="/planting-calendar" element={<PlantingCalendar />} />
+            <Route path="/garden-planner" element={<GardenPlanner />} />
+            <Route path="/automation" element={<AutomationDashboard />} />
+            <Route path="/blockchain-certificates" element={<BlockchainCertificates />} />
+            <Route path="/carbon-tracking" element={<CarbonTracking />} />
+            <Route path="/virtual-consultation" element={<VirtualConsultation />} />
+            <Route path="/ai-diagnosis" element={<AIDiseaseDiagnosis />} />
+            <Route path="/yield-prediction" element={<YieldPrediction />} />
+            <Route path="/smart-irrigation" element={<SmartIrrigation />} />
+            <Route path="/pest-alerts" element={<PestAlerts />} />
+            <Route path="/market-predictions" element={<MarketPredictions />} />
+            <Route path="/gamification" element={<CommunityGamification />} />
+            <Route path="/sustainability" element={<SustainabilityTracker />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/community" element={<CommunityHub />} />
+            <Route path="/analytics" element={<FarmAnalytics />} />
+            <Route path="/learning" element={<LearningCenter />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/settings" element={<UserSettings />} />
+            <Route path="/notifications" element={<NotificationCenter />} />
+            <Route path="/help" element={<HelpCenter />} />
+            <Route path="/weather" element={
+              <div className="max-w-4xl mx-auto px-4 py-8">
+                <WeatherWidget />
+              </div>
+            } />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
     </Router>
   );
 }
 
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: 'rgba(255, 255, 255, 0.9)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(34, 197, 94, 0.2)',
+                borderRadius: '16px',
+                color: '#374151',
+              },
+            }}
+          />
+        </div>
+        <Footer />
+        <MobileNavigation />
+      </ErrorBoundary>
+      
+      <PWAInstallPrompt />
 export default App;

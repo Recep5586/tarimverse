@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TrendingUp, Calendar, Users, BookOpen, Award, Settings, ChevronRight, Sun, Cloud, CloudRain, Wind, Thermometer, Droplets, Leaf, Sprout, TreePine, Flower } from 'lucide-react';
+import { TrendingUp, Calendar, Users, BookOpen, Award, Settings, ChevronRight, Sun, Cloud, CloudRain, Wind, Thermometer, Droplets, Leaf, Sprout, TreePine, Flower, BarChart3, Bug } from 'lucide-react';
 
 interface SidebarProps {
   season: string;
@@ -10,11 +10,11 @@ export default function Sidebar({ season }: SidebarProps) {
 
   const menuItems = [
     { icon: TrendingUp, label: 'Popüler Konular', count: 12, color: 'text-red-500', gradient: 'from-red-400 to-pink-500' },
+    { icon: Users, label: 'Topluluk', count: 8, color: 'text-purple-500', gradient: 'from-purple-400 to-pink-500' },
+    { icon: BookOpen, label: 'Öğrenme Merkezi', count: 15, color: 'text-blue-500', gradient: 'from-blue-400 to-indigo-500' },
     { icon: Calendar, label: 'Bahçe Etkinlikleri', count: 3, color: 'text-blue-500', gradient: 'from-blue-400 to-indigo-500' },
-    { icon: Users, label: 'Çiftçi Toplulukları', count: 8, color: 'text-purple-500', gradient: 'from-purple-400 to-pink-500' },
-    { icon: BookOpen, label: 'Doğa Rehberi', count: 15, color: 'text-green-500', gradient: 'from-green-400 to-emerald-500' },
     { icon: Award, label: 'Hasat Başarıları', count: 5, color: 'text-yellow-500', gradient: 'from-yellow-400 to-orange-500' },
-    { icon: Settings, label: 'Bahçe Ayarları', color: 'text-gray-500', gradient: 'from-gray-400 to-gray-500' }
+    { icon: BarChart3, label: 'Analitik', color: 'text-indigo-500', gradient: 'from-indigo-400 to-purple-500' }
   ];
 
   const trendingTopics = [

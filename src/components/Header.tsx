@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Menu, X, Settings, LogOut, Bell, MessageCircle, Sprout, Leaf, Sun, Snowflake, ShoppingBag, Cloud, Bot, Shield, Globe, Video } from 'lucide-react';
+import { Search, Menu, X, Settings, LogOut, Bell, MessageCircle, Sprout, Leaf, Sun, Snowflake, ShoppingBag, Cloud, Bot, Shield, Globe, Video, Users, BookOpen, BarChart3, User } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import AuthModal from './Auth/AuthModal';
 
@@ -56,13 +56,16 @@ export default function Header({ season = 'spring' }: HeaderProps) {
   const navigationItems = [
     { path: '/', label: 'Ana Bahçe', icon: 'home' },
     { path: '/market', label: 'Yerel Pazar', icon: 'market' },
+    { path: '/community', label: 'Topluluk', icon: 'community' },
+    { path: '/learning', label: 'Öğrenme', icon: 'learning' },
     { path: '/planting-calendar', label: 'Ekim Takvimi', icon: 'calendar' },
     { path: '/garden-planner', label: 'Bahçe Planlayıcısı', icon: 'planner' },
+    { path: '/analytics', label: 'Analitik', icon: 'analytics' },
     { path: '/automation', label: 'Akıllı Tarım', icon: 'automation' },
     { path: '/weather', label: 'Hava Durumu', icon: 'weather' },
-    { path: '/blockchain-certificates', label: 'Sertifikalar', icon: 'certificates' },
-    { path: '/carbon-tracking', label: 'Karbon İzleme', icon: 'carbon' },
-    { path: '/virtual-consultation', label: 'Uzman Danışmanlık', icon: 'consultation' },
+    { path: '/ai-diagnosis', label: 'AI Teşhis', icon: 'ai' },
+    { path: '/market-predictions', label: 'Pazar Analizi', icon: 'predictions' },
+    { path: '/sustainability', label: 'Sürdürülebilirlik', icon: 'sustainability' },
   ];
 
   return (
@@ -117,6 +120,9 @@ export default function Header({ season = 'spring' }: HeaderProps) {
                   {item.icon === 'planner' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>}
                   {item.icon === 'automation' && <Bot className="w-5 h-5" />}
                   {item.icon === 'weather' && <Cloud className="w-5 h-5" />}
+                  {item.icon === 'ai' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>}
+                  {item.icon === 'predictions' && <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>}
+                  {item.icon === 'sustainability' && <Leaf className="w-5 h-5" />}
                   {item.icon === 'certificates' && <Shield className="w-5 h-5" />}
                   {item.icon === 'carbon' && <Globe className="w-5 h-5" />}
                   {item.icon === 'consultation' && <Video className="w-5 h-5" />}
@@ -127,14 +133,14 @@ export default function Header({ season = 'spring' }: HeaderProps) {
               {user ? (
                 <>
                   {/* Notifications */}
-                  <button className="relative p-4 rounded-2xl hover:bg-green-100/50 transition-all duration-300 group">
+                  <Link to="/notifications" className="relative p-4 rounded-2xl hover:bg-green-100/50 transition-all duration-300 group">
                     <Bell className="w-6 h-6 text-green-600 group-hover:text-green-700 transition-colors" />
                     {notifications > 0 && (
                       <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center animate-pulse shadow-lg">
                         {notifications}
                       </span>
                     )}
-                  </button>
+                  </Link>
 
                   {/* Messages */}
                   <button className="p-4 rounded-2xl hover:bg-green-100/50 transition-all duration-300 group">
@@ -163,10 +169,14 @@ export default function Header({ season = 'spring' }: HeaderProps) {
                     {/* Profile Dropdown */}
                     {isProfileMenuOpen && (
                       <div className="absolute right-0 mt-3 w-56 bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl border border-green-200/50 py-3 animate-slide-up">
-                        <button className="flex items-center space-x-3 w-full px-5 py-3 text-sm text-gray-700 hover:bg-green-100/50 transition-colors rounded-xl mx-2">
+                        <Link to="/profile" className="flex items-center space-x-3 w-full px-5 py-3 text-sm text-gray-700 hover:bg-green-100/50 transition-colors rounded-xl mx-2">
+                          <User className="h-5 w-5 text-green-600" />
+                          <span>Profilim</span>
+                        </Link>
+                        <Link to="/settings" className="flex items-center space-x-3 w-full px-5 py-3 text-sm text-gray-700 hover:bg-green-100/50 transition-colors rounded-xl mx-2">
                           <Settings className="h-5 w-5 text-green-600" />
                           <span>Ayarlar</span>
-                        </button>
+                        </Link>
                         <button 
                           onClick={signOut}
                           className="flex items-center space-x-3 w-full px-5 py-3 text-sm text-gray-700 hover:bg-red-100/50 transition-colors rounded-xl mx-2"
@@ -222,13 +232,16 @@ export default function Header({ season = 'spring' }: HeaderProps) {
                   >
                     {item.icon === 'home' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>}
                     {item.icon === 'market' && <ShoppingBag className="w-6 h-6" />}
+                    {item.icon === 'community' && <Users className="w-6 h-6" />}
+                    {item.icon === 'learning' && <BookOpen className="w-6 h-6" />}
+                    {item.icon === 'community' && <Users className="w-5 h-5" />}
+                    {item.icon === 'learning' && <BookOpen className="w-5 h-5" />}
                     {item.icon === 'calendar' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2z" /></svg>}
                     {item.icon === 'planner' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>}
-                    {item.icon === 'automation' && <Bot className="w-6 h-6" />}
-                    {item.icon === 'weather' && <Cloud className="w-6 h-6" />}
-                    {item.icon === 'certificates' && <Shield className="w-6 h-6" />}
-                    {item.icon === 'carbon' && <Globe className="w-6 h-6" />}
-                    {item.icon === 'consultation' && <Video className="w-6 h-6" />}
+                    {item.icon === 'analytics' && <BarChart3 className="w-6 h-6" />}
+                    {item.icon === 'ai' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>}
+                    {item.icon === 'predictions' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>}
+                    {item.icon === 'sustainability' && <Leaf className="w-6 h-6" />}
                     <span className="font-medium">{item.label}</span>
                   </Link>
                 ))}
