@@ -62,14 +62,14 @@ function App() {
   }, []);
 
   const HomePage = () => (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden pb-20 lg:pb-8">
       <FloatingElements season={currentSeason} />
       
       <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="max-w-7xl mx-auto px-0 lg:px-4 xl:px-6 2xl:px-8 py-4 lg:py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-8">
             {/* Main Content */}
-            <div className="lg:col-span-3 space-y-8">
+            <div className="lg:col-span-3 space-y-4 lg:space-y-8">
               <CreatePost 
                 currentUser={{ 
                   name: 'Kullanıcı',
@@ -81,7 +81,7 @@ function App() {
               {postsLoading ? (
                 <LoadingSpinner message="Gönderiler yükleniyor..." />
               ) : (
-                <div className="space-y-8">
+                <div className="space-y-4 lg:space-y-8">
                   {posts.map((post) => (
                     <Post key={post.id} post={post} season={currentSeason} />
                   ))}
@@ -90,7 +90,7 @@ function App() {
             </div>
 
             {/* Sidebar */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 hidden lg:block">
               <Sidebar season={currentSeason} />
             </div>
           </div>
@@ -102,7 +102,9 @@ function App() {
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center">
-        <LoadingSpinner size="lg" message="TarımVerse yükleniyor..." />
+        <div className="text-center px-4">
+          <LoadingSpinner size="lg" message="TarımVerse yükleniyor..." />
+        </div>
       </div>
     );
   }
@@ -110,11 +112,11 @@ function App() {
   return (
     <ErrorBoundary>
       <Router>
-        <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+        <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative">
           <MetaTags />
           <Header season={currentSeason} />
           
-          <main className="pb-20 lg:pb-8">
+          <main className="pb-20 lg:pb-8 min-h-screen">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/market" element={<MarketPlace />} />
