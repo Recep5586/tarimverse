@@ -5,6 +5,7 @@ import { useAuthStore } from '../store/authStore';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { motion } from 'framer-motion';
+import LazyImage from './Performance/LazyImage';
 
 interface PostProps {
   post: any;
@@ -193,10 +194,10 @@ export default function Post({ post, season }: PostProps) {
       {post.image_url && (
         <div className="px-4 lg:px-8 pb-4 lg:pb-6 relative z-10">
           <div className="relative group cursor-pointer" onClick={() => window.open(post.image_url, '_blank')}>
-            <img
+            <LazyImage
               src={post.image_url}
               alt="Post content"
-              className="w-full h-48 lg:h-96 object-cover rounded-xl lg:rounded-2xl border-2 border-green-200/50 shadow-lg group-hover:shadow-xl transition-all duration-300"
+              className="w-full h-48 lg:h-96 rounded-xl lg:rounded-2xl border-2 border-green-200/50 shadow-lg group-hover:shadow-xl transition-all duration-300"
             />
             <div className="absolute inset-0 bg-black/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>

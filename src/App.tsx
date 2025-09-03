@@ -11,8 +11,10 @@ import Post from './components/Post';
 import FloatingElements from './components/FloatingElements';
 import MobileNavigation from './components/Mobile/MobileNavigation';
 import PWAInstallPrompt from './components/PWA/PWAInstallPrompt';
+import OfflineIndicator from './components/PWA/OfflineIndicator';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import MetaTags from './components/SEO/MetaTags';
+import WelcomeScreen from './components/Welcome/WelcomeScreen';
 import LoadingSpinner from './components/LoadingSpinner';
 
 // Page Components
@@ -62,41 +64,44 @@ function App() {
   }, []);
 
   const HomePage = () => (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden pb-20 lg:pb-8">
-      <FloatingElements season={currentSeason} />
-      
-      <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-0 lg:px-4 xl:px-6 2xl:px-8 py-4 lg:py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-3 space-y-4 lg:space-y-8">
-              <CreatePost 
-                currentUser={{ 
-                  name: 'Kullanıcı',
-                  avatar_url: 'https://images.pexels.com/photos/1139743/pexels-photo-1139743.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1'
-                }} 
-                season={currentSeason} 
-              />
-              
-              {postsLoading ? (
-                <LoadingSpinner message="Gönderiler yükleniyor..." />
-              ) : (
-                <div className="space-y-4 lg:space-y-8">
-                  {posts.map((post) => (
-                    <Post key={post.id} post={post} season={currentSeason} />
-                  ))}
-                </div>
-              )}
-            </div>
+    <>
+      <WelcomeScreen />
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden pb-20 lg:pb-8">
+        <FloatingElements season={currentSeason} />
+        
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-0 lg:px-4 xl:px-6 2xl:px-8 py-4 lg:py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-8">
+              {/* Main Content */}
+              <div className="lg:col-span-3 space-y-4 lg:space-y-8">
+                <CreatePost 
+                  currentUser={{ 
+                    name: 'Kullanıcı',
+                    avatar_url: 'https://images.pexels.com/photos/1139743/pexels-photo-1139743.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1'
+                  }} 
+                  season={currentSeason} 
+                />
+                
+                {postsLoading ? (
+                  <LoadingSpinner message="Gönderiler yükleniyor..." />
+                ) : (
+                  <div className="space-y-4 lg:space-y-8">
+                    {posts.map((post) => (
+                      <Post key={post.id} post={post} season={currentSeason} />
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            {/* Sidebar */}
-            <div className="lg:col-span-1 hidden lg:block">
-              <Sidebar season={currentSeason} />
+              {/* Sidebar */}
+              <div className="lg:col-span-1 hidden lg:block">
+                <Sidebar season={currentSeason} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 
   if (authLoading) {
@@ -152,6 +157,7 @@ function App() {
           <Footer />
           <MobileNavigation />
           <PWAInstallPrompt />
+          <OfflineIndicator />
           
           <Toaster
             position="top-right"

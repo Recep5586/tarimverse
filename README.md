@@ -90,8 +90,8 @@ TarımVerse, Türkiye'nin en kapsamlı tarım sosyal medya platformudur. Çiftç
 
 1. **Projeyi klonlayın**
 ```bash
-git clone https://github.com/tarimverse/tarimverse.git
-cd tarimverse
+git clone [repository-url]
+cd tarim-sosyal-platform
 ```
 
 2. **Bağımlılıkları yükleyin**
@@ -99,28 +99,21 @@ cd tarimverse
 npm install
 ```
 
-3. **Çevre değişkenlerini ayarlayın**
-```bash
-cp .env.example .env
-```
-
-`.env` dosyasını düzenleyerek Supabase bilgilerinizi ekleyin:
-```
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-4. **Geliştirme sunucusunu başlatın**
+3. **Geliştirme sunucusunu başlatın**
 ```bash
 npm run dev
 ```
 
-## 🗄️ Veritabanı Kurulumu
+## 💾 Veri Depolama
 
-1. [Supabase](https://supabase.com) hesabı oluşturun
-2. Yeni proje oluşturun
-3. `supabase/migrations` klasöründeki SQL dosyalarını sırayla çalıştırın
-4. RLS (Row Level Security) politikalarının aktif olduğundan emin olun
+Proje yerel JSON tabanlı veri depolama kullanır:
+- Veriler tarayıcının localStorage'ında saklanır
+- Demo hesapları otomatik olarak oluşturulur
+- Gerçek bir veritabanına geçiş için Supabase entegrasyonu hazır
+
+### Demo Hesapları:
+- **Ahmet Karaca**: ahmet@example.com / demo123
+- **Fatma Öztürk**: fatma@example.com / demo123
 
 ## 🌍 Deployment
 

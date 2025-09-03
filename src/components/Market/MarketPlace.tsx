@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, MapPin, TrendingUp, Plus, Heart, MessageCircle, Star } from 'lucide-react';
 import { useMarketStore } from '../../store/marketStore';
 import { useAuthStore } from '../../store/authStore';
+import CreateMarketItem from './CreateMarketItem';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
@@ -43,7 +44,7 @@ export default function MarketPlace() {
           {user && (
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center space-x-1 lg:space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 lg:px-6 py-2 lg:py-3 rounded-xl lg:rounded-2xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 mobile-button"
+              className="flex items-center space-x-1 lg:space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 lg:px-6 py-2 lg:py-3 rounded-xl lg:rounded-2xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               <Plus className="h-4 w-4 lg:h-5 lg:w-5" />
               <span className="font-semibold text-sm lg:text-base">Ürün Ekle</span>
@@ -217,6 +218,11 @@ export default function MarketPlace() {
           <p className="text-gray-600 text-sm lg:text-base">Arama kriterlerinizi değiştirmeyi deneyin</p>
         </div>
       )}
+
+      <CreateMarketItem 
+        isOpen={showCreateModal} 
+        onClose={() => setShowCreateModal(false)} 
+      />
     </div>
   );
 }

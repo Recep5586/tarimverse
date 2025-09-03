@@ -3,6 +3,7 @@ import { Settings, Bell, Shield, Globe, Palette, Download, Trash2, User, Mail, L
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
 import toast from 'react-hot-toast';
+import DemoData from '../Demo/DemoData';
 
 export default function UserSettings() {
   const [activeSection, setActiveSection] = useState('profile');
@@ -321,6 +322,17 @@ export default function UserSettings() {
                     </button>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {activeSection === 'data' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-6"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Veri Yönetimi</h2>
+                <DemoData />
               </motion.div>
             )}
 

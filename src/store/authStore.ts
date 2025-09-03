@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { supabase, User, isSupabaseConfigured } from '../lib/supabase';
+import { User } from '../lib/supabase';
+import localDB from '../lib/localDatabase';
 import toast from 'react-hot-toast';
 
 interface AuthState {
@@ -18,27 +19,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initialize: async () => {
     try {
-      if (!isSupabaseConfigured()) {
-        console.warn('Supabase not configured');
-        set({ loading: false });
-        return;
-      }
-
-      const { data: { session } } = await supabase!.auth.getSession();
-      
-      if (session?.user) {
-        const { data: profile } = await supabase!
-          .from('users')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        
-        if (profile) {
-          set({ user: profile, loading: false });
-        }
-      } else {
-        set({ loading: false });
-      }
+      const user = localDB.auth.getCurrentUser();
+      set({ user, loading: false });
     } catch (error) {
       console.error('Auth initialization error:', error);
       set({ loading: false });
@@ -47,30 +29,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signIn: async (email: string, password: string) => {
     try {
-      if (!isSupabaseConfigured()) {
-        toast.error('Supabase yapılandırması eksik');
-        return;
-      }
-
-      const { data, error } = await supabase!.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-
-      if (data.user) {
-        const { data: profile } = await supabase!
-          .from('users')
-          .select('*')
-          .eq('id', data.user.id)
-          .single();
-
-        if (profile) {
-          set({ user: profile });
-          toast.success('Başarıyla giriş yaptınız! 🌱');
-        }
-      }
+      const user = await localDB.auth.signIn(email, password);
+      set({ user });
+      toast.success('Başarıyla giriş yaptınız! 🌱');
     } catch (error: any) {
       toast.error(error.message || 'Giriş yapılırken hata oluştu');
       throw error;
@@ -79,36 +40,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signUp: async (email: string, password: string, name: string) => {
     try {
-      if (!isSupabaseConfigured()) {
-        toast.error('Supabase yapılandırması eksik');
-        return;
-      }
-
-      const { data, error } = await supabase!.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-
-      if (data.user) {
-        const { error: profileError } = await supabase!
-          .from('users')
-          .insert([
-            {
-              id: data.user.id,
-              email: data.user.email,
-              name,
-              verified: false,
-              followers_count: 0,
-              following_count: 0,
-            },
-          ]);
-
-        if (profileError) throw profileError;
-
-        toast.success('Hesabınız oluşturuldu! Giriş yapabilirsiniz. 🌱');
-      }
+      const user = await localDB.auth.signUp(email, password, name);
+      set({ user });
+      toast.success('Hesabınız oluşturuldu! Hoş geldiniz! 🌱');
     } catch (error: any) {
       toast.error(error.message || 'Kayıt olurken hata oluştu');
       throw error;
@@ -117,9 +51,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signOut: async () => {
     try {
-      const { error } = await supabase!.auth.signOut();
-      if (error) throw error;
-      
+      await localDB.auth.signOut();
       set({ user: null });
       toast.success('Başarıyla çıkış yaptınız');
     } catch (error: any) {
@@ -132,16 +64,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (!user) return;
 
     try {
-      const { data, error } = await supabase!
-        .from('users')
-        .update(updates)
-        .eq('id', user.id)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      set({ user: data });
+      const updatedUser = await localDB.auth.updateProfile(user.id, updates);
+      set({ user: updatedUser });
       toast.success('Profil güncellendi! 🌱');
     } catch (error: any) {
       toast.error(error.message || 'Profil güncellenirken hata oluştu');

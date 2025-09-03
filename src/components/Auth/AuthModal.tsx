@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Mail, Lock, User, Leaf } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import DemoLogin from '../Demo/DemoLogin';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -160,6 +161,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'signin' }: A
             </form>
 
             <div className="mt-8 text-center">
+              <DemoLogin />
               <p className="text-gray-600">
                 {mode === 'signin' ? 'Hesabın yok mu?' : 'Zaten hesabın var mı?'}
                 <button
